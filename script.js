@@ -433,7 +433,7 @@ function commandHandler(command, character) {
 
 //initial game setup and user command handling
 function startGame() {
-    startInfo.style.display = "none";
+    introDescription.style.display = "none";
     //set and display start zone.
     currentZone = TheHill;
     displayZoneInfo(currentZone);
