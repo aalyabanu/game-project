@@ -65,10 +65,10 @@ class Zone {
         const entries = Object.entries(this._connectedZones);
         let details = []
         for (const [direction, zone] of entries) {
-            let description = "to your "+ "<b>"+direction+"</b>"+ " lies "+ zone._name + "  ";
+            let description = "to your " + "<b>" + direction + "</b>" + " lies " + zone._name + "  ";
             details.push(description);
         }
-        return "From here, "+ details +". " +"Where will you go?";
+        return "From here, " + details + ". " + "Where will you go?";
     }
     //method to move to a new zone
     move(direction) {
@@ -306,8 +306,8 @@ GoblinTown.connectZone("east", TheLonelyMountain);
 GoblinTown.connectZone("west", TheGreenDragonInn);
 GoblinTown.connectZone("south", TheForestOfMirkwood);
 TheGreenDragonInn.connectZone("north", MistyMountain);
-GoblinTown.connectZone("east", GoblinTown);
-GoblinTown.connectZone("south", TheHill);
+TheGreenDragonInn.connectZone("east", GoblinTown);
+TheGreenDragonInn.connectZone("south", TheHill);
 TheHill.connectZone("north", TheGreenDragonInn);
 TheHill.connectZone("east", TheForestOfMirkwood);
 TheForestOfMirkwood.connectZone("north", GoblinTown);
@@ -434,6 +434,7 @@ function commandHandler(command, character) {
 //initial game setup and user command handling
 function startGame() {
     introDescription.style.display = "none";
+
     //set and display start zone.
     currentZone = TheHill;
     displayZoneInfo(currentZone);
