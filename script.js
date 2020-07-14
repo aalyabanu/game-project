@@ -68,7 +68,7 @@ class Zone {
             let description = "to your " + "<b>" + direction + "</b>" + " lies " + "<b>" + zone._name + "</b>" + "</br>";
             details.push(description);
         }
-        return "From here, " + details + "</br>" + "What are you going to do?";
+        return "From here, " + details + "</br>" + "What are you going to do? Type " + "<b>" + "help " + "</b>" + "to see a list of commands.";
     }
     //method to move to a new zone
     move(direction) {
@@ -94,6 +94,10 @@ class Item {
     get description() {
         return this._description;
     }
+    get pair() {
+        return this._pair;
+    }
+
     set name(value) {
         if (value < 3) {
             console.error("The item name is too short.");
@@ -108,9 +112,17 @@ class Item {
         }
         this._description = value;
     }
+    set pair(value) {
+        if (value < 3) {
+            console.error("The item pair is too short.")
+            return;
+        }
+        this._pair = value;
+    }
     describe() {
         return "You look around and find " + this._name + ". " + this._name + " is a " + this._description;
     }
+
 }
 
 //This is the parent class
@@ -293,10 +305,11 @@ LakeTown.connectZone("north", TheLonelyMountain);
 LakeTown.connectZone("west", TheForestOfMirkwood);
 
 //creating instances of items
-const TreasureDoor = new Item(" Treasure Door");
-TreasureDoor.description = "the secret door that leads to an immense amount of gold and jewelries, including the most precious jewel Arkenstone. But you need a special key to open the Treasure Door.";
 const Key = new Item("Key");
 Key.description = "The key that opens the secret treasure door in the Lonely Mountain";
+const TreasureDoor = new Item(" Treasure Door");
+TreasureDoor.description = "the secret door that leads to an immense amount of gold and jewelries, including the most precious jewel Arkenstone. But you need a special key to open the Treasure Door.";
+TreasureDoor.pair = Key;
 // const Longbow = new Item("Longbow");
 // Longbow.description = "the legendary bow that was used to kill the last dragon that attacked the Shire."
 const BlackArrow = new Item("Black Arrow");
@@ -325,8 +338,8 @@ Gondalf.description = "a wise old wizard with long white hair and sweeping silve
 Gondalf.conversation = "We've been blind and in our blindness the enemy has returned. I entrust you the key to the lost treasures of the Lonely Mountain. I believe when the time comes, you will return the treasures to its rightful owner. ";
 
 const Bard = new Friend("Bard");
-Bard.description = "a grim and honest bowman who lives in the Lake Town with his three children. When he sees you, he thnks for a moment and comes forward.";
-Bard.conversation = "I guess it is time for me to hand you the legendary Longbow. The future of the Shire lies in your hands. ";
+Bard.description = "a grim and honest bowman who lives in the Lake Town with his three children. When he sees you, he thinks for a moment and wishes you well";
+Bard.conversation = "The future of the Shire lies in your hands. ";
 
 const Galadriel = new Friend("Galadriel");
 Galadriel.description = "the greatest female elf in the middle-earth. She looks at you, reads your mind and points to a dagger lying on a stone table";
@@ -386,7 +399,7 @@ function commandHandler(command, character, zone) {
                 }
                 break;
             } else {
-                alert("There is nobody attack at the moment.");
+                alert("There is nobody to attack at the moment.");
                 break;
             }
 
@@ -457,8 +470,10 @@ let killedEnemies = [];
 function startGame() {
     //set and display start Zone
     introDescription.style.display = "none";
+    const score = 0;
     currentZone = TheHill;
     displayZoneInfo(currentZone);
+
 
     //handle commands
     document.addEventListener("keydown", function (event) {
