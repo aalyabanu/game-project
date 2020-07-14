@@ -65,10 +65,10 @@ class Zone {
         const entries = Object.entries(this._connectedZones);
         let details = []
         for (const [direction, zone] of entries) {
-            let description = "to your " + "<b>" + direction + "</b>" + " lies " + zone._name + "  " + "</br>";
+            let description = "to your " + "<b>" + direction + "</b>" + " lies " + "<b>" + zone._name + "</b>" + "</br>";
             details.push(description);
         }
-        return "From here, " + details + "</br>" + "What would you like to do?";
+        return "From here, " + details + "</br>" + "What are you going to do?";
     }
     //method to move to a new zone
     move(direction) {
@@ -179,6 +179,7 @@ class Enemy extends Character {
     }
     attack(item) {
         for (let i = 0; i < item.length; i++) {
+            console.log(item[i]);
             if (item[i] === this._weakness) {
                 return true;
             } else {
@@ -243,19 +244,19 @@ class BilboBaggins {
 const TheHill = new Zone("The Hill");
 TheHill.description = "the most prestigious area of the Hobbition. Baggins family have lived here for centuries. "
 const LakeTown = new Zone("Lake Town");
-LakeTown.description = " a human-city built on Long Lake, near the Lonely Mountain. Bard, the Bowman lives here. Legend has it that he knows the location of the famous Longbow which was used by his ancestors to kill the last dragon that attacked the Shire."
+LakeTown.description = " a human-city built on Long Lake, near the Lonely Mountain. Bard, the Bowman lives here. "
 const TheLonelyMountain = new Zone("The Lonely Mountain");
 TheLonelyMountain.description = "the mountain that was once the home of the dwarves until the dragon Smaug took control over it.";
 const Cave = new Zone("The cave");
 Cave.description = "a spooky cave near the lonely mountain where nobody dares to go."
 const Rivendell = new Zone("Rivendell");
-Rivendell.description = "a deep valley that is only approachable by two narrow winding paths, where elves live with their master Elrond."
+Rivendell.description = "a deep valley that is only approachable by two narrow winding paths, where elves live."
 const TheForestOfMirkwood = new Zone("The forest of Mirkwood");
 TheForestOfMirkwood.description = " a dark and scary forest filled with giant spiders.";
 const GoblinTown = new Zone("Goblin Town");
 GoblinTown.description = " a network of branching caves and tunnels which is the dwelling place for the gobblins and their king Ashûrz. "
 const MistyMountain = new Zone("Misty Mountain");
-MistyMountain.description = "A huge and dangerous mountain chain that stretches over hundreds of miles."
+MistyMountain.description = "a huge and dangerous mountain chain that stretches over hundreds of miles."
 const TheGreenDragonInn = new Zone("The Green Dragon Inn");
 TheGreenDragonInn.description = "a warm and friendly meeting place for all Shire-folks."
 
@@ -289,9 +290,9 @@ LakeTown.connectZone("west", TheForestOfMirkwood);
 const TreasureDoor = new Item(" Treasure Door");
 TreasureDoor.description = "the secret door that leads to an immense amount of gold and jewelries, including the most precious jewel Arkenstone. But you need a special key to open the Treasure Door.";
 const Key = new Item("Key");
-Key.description = "The key to enchanted secret entrance to the Lonely Mountain";
-const Longbow = new Item("Longbow");
-Longbow.description = "the legendary bow that was used to kill the last dragon that attacked the Shire."
+Key.description = "The key that opens the secret treasure door in the Lonely Mountain";
+// const Longbow = new Item("Longbow");
+// Longbow.description = "the legendary bow that was used to kill the last dragon that attacked the Shire."
 const BlackArrow = new Item("Black Arrow");
 BlackArrow.description = "not a regular arrow but one of the few arrows that have been forged by the dwarves of the Lonely Mountain. You can kill a dragon only by a black arrow. When Smaug attacked the dwarf kingdom, one of the dwarves managed to hide it in the dark forest of Mirkwood. Nobody has found it all these years.";
 const Sting = new Item("Sting");
@@ -309,12 +310,12 @@ Goblin.conversation = " grrr...I likes human..I eats it.";
 Goblin.weakness = Sting;
 
 const GiantSpiders = new Enemy("Giant spider");
-GiantSpiders.description = "vicious and deadly creature that lives in dark and cold areas of the forest. It hisses and bares its fang when it sees you";
+GiantSpiders.description = "vicious and deadly creature. It hisses and bares its fang when it sees you. Nearby, you see the legendary Black Arrow that was used to kill the last dragon";
 GiantSpiders.conversation = " hiss...hiss";
 GiantSpiders.weakness = Sting;
 
 const Gondalf = new Friend("Gondalf");
-Gondalf.description = "a wise old wizard with long white hair and sweeping silver beard. He smiles and gives you a warm embrace";
+Gondalf.description = "a wise old wizard with long white hair and sweeping silver beard. He smiles and gives you a warm embrace. Then he points towards a golden key lying on a stone";
 Gondalf.conversation = "We've been blind and in our blindness the enemy has returned. I entrust you the key to the lost treasures of the Lonely Mountain. I believe when the time comes, you will return the treasures to its rightful owner. ";
 
 const Bard = new Friend("Bard");
@@ -322,13 +323,13 @@ Bard.description = "a grim and honest bowman who lives in the Lake Town with his
 Bard.conversation = "I guess it is time for me to hand you the legendary Longbow. The future of the Shire lies in your hands. ";
 
 const Galadriel = new Friend("Galadriel");
-Galadriel.description = "the greatest female elf in the middle-earth. She looks at you and reads your mind.";
+Galadriel.description = "the greatest female elf in the middle-earth. She looks at you, reads your mind and points to a dagger lying on a stone table";
 Galadriel.conversation = "Even the smallest person can change the course of the future. I offer you my dagger to help you in your times of need.";
 
 //assigning items to zones or to the characters who gift them
 TheLonelyMountain.zoneItem = TreasureDoor;
 Gondalf.gift = Key;
-Bard.gift = Longbow;
+// Bard.gift = Longbow;
 Galadriel.gift = Sting;
 TheForestOfMirkwood.zoneItem = BlackArrow;
 
@@ -367,33 +368,57 @@ function commandHandler(command, character, zone) {
 
     switch (command) {
         case "attack":
-            if (character.attack(inventory) === true) {
-                msg = "congratulations you defeated " + character.name;
-                alert(msg);
+            if (character) {
+
+                if (character.attack(inventory) === true) {
+                    msg = "congratulations you defeated " + character.name;
+                    alert(msg);
 
 
+                } else {
+                    alert(character.name + " has defeated you. Game over.");
+                }
+                break;
             } else {
-                alert("game over");
+                alert("There is nobody attack at the moment.");
+                break;
             }
-            break;
 
         case "talk":
-            msg = character.speak();
-            alert(msg);
-            break;
+            if (character) {
+                msg = character.speak();
+                alert(msg);
+                break;
+            } else {
+                alert("There is nobody in front of you to start a dialogue.");
+            }
         case "take":
             if (character.gift) {
 
-                inventory.indexOf(character.gift) === -1 ? inventory.push(character.gift) : alert("This item already exists in your backpack.");
-            }
+                if (inventory.indexOf(character.gift) === -1) {
+                    inventory.push(character.gift);
+                    let itemAdded = inventory[inventory.length - 1]._name;
+                    alert(itemAdded + " has been added to your backpack.");
 
-            if (zone.zoneItem) {
+                } else {
+                    alert("This item already exists in your backpack.");
+                }
+
+            } else if (zone.zoneItem) {
                 if (zone.zoneItem === TreasureDoor) {
                     alert("You cannot add this item to your backpack!")
                 } else {
-                    inventory.indexOf(zone.zoneItem) === -1 ? inventory.push(zone.zoneItem) : alert("This item already exists in your backpack.");
+
+                    if (inventory.indexOf(zone.zoneItem) === -1) {
+                        inventory.push(zone.zoneItem);
+                        let itemAdded = inventory[inventory.length - 1]._name;
+                        alert(itemAdded + " has been added to your backpack.");
+                    }
                 }
+            } else {
+                alert("There is nothing to take here.");
             }
+
             break;
         case "inventory":
             let array = [];
@@ -404,7 +429,17 @@ function commandHandler(command, character, zone) {
             alert("Here is what's in your backpack so far:    " + array);
             break;
         case "help":
-            alert("\r\n" + "List of possible commands" + "\r\n" + "To move:   north, east, south, west  " + "\r\n" + "To attack the enemy:   attack" + "\r\n" + "To take object:   take" + "\r\n" + "To check your backpack:   inventory" + "\r\n" + "To start dialogue with enemy/friend:   talk")
+            alert("\r\n" + "List of possible commands" + "\r\n" + "To move:   north, east, south, west  " + "\r\n" + "To attack the enemy:   attack" + "\r\n" + "To take object:   take" + "\r\n" + "To read description of the object you  found:   item" + "\r\n" + "To check your backpack:   inventory" + "\r\n" + "To start dialogue with enemy/friend:   talk")
+            break;
+
+        case "item":
+            if (character.gift) {
+                alert("\r\n" + "What you have found here" + " is " + character.gift.description);
+            } else if (zone.zoneItem) {
+                alert("\r\n" + "What you have found here" + " is " + zone.zoneItem.description);
+            } else {
+                alert("Nothing is found here.");
+            }
             break;
         default:
             alert("This command does not exist. Please try again.")
@@ -424,7 +459,7 @@ function startGame() {
         if (event.key === "Enter") {
             let command = document.getElementById("usertext").value.toLowerCase();
             const directions = ["north", "south", "east", "west"];
-            const commands = ["attack", "talk", "take", "inventory", "help"];
+            const commands = ["attack", "talk", "take", "inventory", "help", "item"];
             if (killedEnemies.length != 3) {
                 if (directions.includes(command)) {
                     currentZone = currentZone.move(command);
