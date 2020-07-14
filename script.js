@@ -65,7 +65,7 @@ class Zone {
         const entries = Object.entries(this._connectedZones);
         let details = []
         for (const [direction, zone] of entries) {
-            let description = "to your " + "<b>" + direction + "</b>" + " lies " + zone._name + "  "+"</br>";
+            let description = "to your " + "<b>" + direction + "</b>" + " lies " + zone._name + "  " + "</br>";
             details.push(description);
         }
         return "From here, " + details + "</br>" + "What would you like to do?";
@@ -166,7 +166,7 @@ class Enemy extends Character {
     constructor(name) {
         super(name); //inherits parent variables  and methods;
         this._weakness = ""; //its own variable
-        }
+    }
     get weakness() {
         return this._weakness;
     }
@@ -178,10 +178,12 @@ class Enemy extends Character {
         this._weakness = value;
     }
     attack(item) {
-        if (item === this._weakness) {
-            return true;
-        } else {
-            return false;
+        for (let i = 0; i < item.length; i++) {
+            if (item[i] === this._weakness) {
+                return true;
+            } else {
+                return false;
+            }
         }
     }
 }
@@ -201,22 +203,14 @@ class Friend extends Character {
         }
         this._gift = value;
     }
-    present() {
-        score = score++;
-        return "You have now been given " + this._gift.name + ". " + this._gift.name + " is " + this.gift.description;
-    }
 
 }
 class BilboBaggins {
     constructor() {
         this._backpack = []
-        this._score = 0;
     }
     get backpack() {
         return this._backpack;
-    }
-    get score() {
-        return this._score;
     }
 
     //method to change score;
@@ -348,7 +342,6 @@ TheForestOfMirkwood.character = GiantSpiders;
 
 //creating player
 const player = new BilboBaggins();
-console.log("current score " + player.score);
 
 // Subroutines
 function displayZoneInfo(zone) {
@@ -369,33 +362,57 @@ function displayZoneInfo(zone) {
     document.getElementById("usertext").focus();
 }
 
+let inventory = [];
+function commandHandler(command, character, zone) {
 
-function commandHandler(command, character) {
     switch (command) {
         case "attack":
-            //work out how to pass items to fight method from player backpack
-            if (character.attack() === true) {
-                msg = "congratulations you defeated" + character.name;
+            if (character.attack(inventory) === true) {
+                msg = "congratulations you defeated " + character.name;
                 alert(msg);
+
+
             } else {
                 alert("game over");
             }
             break;
+
         case "talk":
             msg = character.speak();
             alert(msg);
             break;
         case "take":
-            msg = character.present();
-            alert(msg);
+            if (character.gift) {
+
+                inventory.indexOf(character.gift) === -1 ? inventory.push(character.gift) : alert("This item already exists in your backpack.");
+            }
+
+            if (zone.zoneItem) {
+                if (zone.zoneItem === TreasureDoor) {
+                    alert("You cannot add this item to your backpack!")
+                } else {
+                    inventory.indexOf(zone.zoneItem) === -1 ? inventory.push(zone.zoneItem) : alert("This item already exists in your backpack.");
+                }
+            }
+            break;
+        case "inventory":
+            let array = [];
+            for (i = 0; i < inventory.length; i++) {
+                array.push(inventory[i]._name);
+                console.log(array);
+            }
+            alert("Here is what's in your backpack so far:    " + array);
+            break;
+        case "help":
+            alert("\r\n" + "List of possible commands" + "\r\n" + "To move:   north, east, south, west  " + "\r\n" + "To attack the enemy:   attack" + "\r\n" + "To take object:   take" + "\r\n" + "To check your backpack:   inventory" + "\r\n" + "To start dialogue with enemy/friend:   talk")
             break;
         default:
-            alert("")
+            alert("This command does not exist. Please try again.")
             break;
 
     }
 }
-
+let killedEnemies = [];
 function startGame() {
     //set and display start Zone
     introDescription.style.display = "none";
@@ -407,16 +424,18 @@ function startGame() {
         if (event.key === "Enter") {
             let command = document.getElementById("usertext").value.toLowerCase();
             const directions = ["north", "south", "east", "west"];
-            const commands = ["attack", "hug", "talk", "take", "inventory"];
-            if (directions.includes(command)) {
-                currentZone = currentZone.move(command);
-                displayZoneInfo(currentZone);
-            } else if (commands.includes(command)) {
-                commandHandler(command, currentZone.character)
-            } else {
-                document.getElementById("usertext").value = ""
-                //change to text message for short time and then reshow
-                alert("that is not a valid command please try again")
+            const commands = ["attack", "talk", "take", "inventory", "help"];
+            if (killedEnemies.length != 3) {
+                if (directions.includes(command)) {
+                    currentZone = currentZone.move(command);
+                    displayZoneInfo(currentZone);
+                } else if (commands.includes(command)) {
+                    commandHandler(command, currentZone.character, currentZone)
+                } else {
+                    document.getElementById("usertext").value = ""
+                    //change to text message for short time and then reshow
+                    alert("that is not a valid command please try again")
+                }
             }
         }
     });
