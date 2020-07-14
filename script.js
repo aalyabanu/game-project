@@ -179,6 +179,7 @@ class Enemy extends Character {
     }
     attack(item) {
         for (let i = 0; i < item.length; i++) {
+            console.log(i);
             console.log(item[i]);
             if (item[i] === this._weakness) {
                 return true;
