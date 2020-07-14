@@ -320,12 +320,12 @@ Sting.description = "a large elvish dagger. Its size is just perfect for little 
 //creating instances of different characters (friends and enemies)
 const Smaug = new Enemy("Smaug");
 Smaug.description = "a powerful and fearsome dragon. He roars and spits fire when he sees you.";
-Smaug.conversation = " I am fire... I am death.My teeth are swords! My claws are spears! My wings are a hurricane! You will burn!";
+Smaug.conversation = " I am fire... I am death. My teeth are swords! My claws are spears! My wings are a hurricane! You will burn!";
 Smaug.weakness = BlackArrow;
 
 const Goblin = new Enemy("Goblin");
 Goblin.description = "an ugly, beefy and greedy creature that feeds on anything imaginable. It Shrieks and squeals when it sees you";
-Goblin.conversation = " grrr...I likes human..I eats it.";
+Goblin.conversation = " grrr...Me likes human..Me eats it.";
 Goblin.weakness = Sting;
 
 const GiantSpiders = new Enemy("Giant spider");
@@ -406,10 +406,11 @@ function commandHandler(command, character, zone) {
         case "talk":
             if (character) {
                 msg = character.speak();
-                alert(msg);
+                alert("\r\n" + "\r\n" + character.name + " says: " + "\r\n" + "'" + msg + "'");
                 break;
             } else {
                 alert("There is nobody in front of you to start a dialogue.");
+                break;
             }
         case "take":
             if (character.gift) {
