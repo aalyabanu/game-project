@@ -178,15 +178,20 @@ class Enemy extends Character {
         this._weakness = value;
     }
     attack(item) {
+        let result = "";
+        console.log("array passed on", item);
+        console.log("item length is, ", item.length);
         for (let i = 0; i < item.length; i++) {
-            console.log(i);
-            console.log(item[i]);
+            console.log("value of i:  ", i);
+            console.log("current array item: ", item[i]);
             if (item[i] === this._weakness) {
-                return true;
+                result = true;
+                break;
             } else {
-                return false;
+                result = false;
             }
         }
+        return result;
     }
 }
 
@@ -255,7 +260,7 @@ Rivendell.description = "a deep valley that is only approachable by two narrow w
 const TheForestOfMirkwood = new Zone("The forest of Mirkwood");
 TheForestOfMirkwood.description = " a dark and scary forest filled with giant spiders.";
 const GoblinTown = new Zone("Goblin Town");
-GoblinTown.description = " a network of branching caves and tunnels which is the dwelling place for the gobblins and their king Ashûrz. "
+GoblinTown.description = " a network of branching caves and tunnels which is the dwelling place for the gobblins. "
 const MistyMountain = new Zone("Misty Mountain");
 MistyMountain.description = "a huge and dangerous mountain chain that stretches over hundreds of miles."
 const TheGreenDragonInn = new Zone("The Green Dragon Inn");
@@ -377,7 +382,7 @@ function commandHandler(command, character, zone) {
 
 
                 } else {
-                    alert(character.name + " has defeated you. Game over.");
+                    alert(character.name + " has defeated you. You have not found the right weapon to kill " + character.name + " yet." + " GAME OVER.");
                 }
                 break;
             } else {
